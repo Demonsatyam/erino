@@ -1,6 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const errorMiddleware = require('./middlewares/error');
+
 const app = express();
 
 app.use(express.json());
@@ -11,9 +13,11 @@ app.use(cors({
   credentials: true,
 }));
 
-// Routes will be added here later
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
+// Routes
+app.use('/api', require('./routes/authRoutes'));
+app.use('/api/leads', require('./routes/leadRoutes'));
+
+// Error middleware (must be after all routes)
+app.use(errorMiddleware);
 
 module.exports = app;
