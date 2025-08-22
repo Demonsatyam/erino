@@ -20,7 +20,7 @@ A fully-featured backend system for managing leads, with authentication, CRUD AP
 
 ## 🗂 Folder Structure (Backend)
 
-\`\`\`
+```
 backend/
 ├── config/
 │   └── db.js                    # MongoDB connection
@@ -49,7 +49,7 @@ backend/
 ├── app.js                      # Express app config
 ├── server.js                   # App entry point
 └── package.json
-\`\`\`
+```
 
 ---
 
