@@ -49,7 +49,18 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return next(new ErrorHandler('Invalid email or password', 401));
 
-  sendToken(user, 200, res);
+  const token = user.getJwtToken(); // or jwt.sign(...)
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'None',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
 
 // @route   POST /logout
