@@ -88,12 +88,12 @@ backend/
 
 ## ⚙️ .env Example
 
-\`\`\`env
+```env
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/leadDB?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_secret
 CLIENT_URL=http://localhost:5173
-\`\`\`
+```
 
 ---
 
