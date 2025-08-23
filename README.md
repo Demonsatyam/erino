@@ -1,5 +1,11 @@
 # 📊 Lead Management System - Backend
 
+The Lead Management System is a full-stack web application designed to streamline the process of managing business leads. The frontend, built with ReactJS, provides a responsive and intuitive interface for users to register, log in, and perform CRUD operations on leads. With features like server-side pagination, filtering, and secure authentication, the system ensures efficient lead tracking and management. The project is fully deployed, enabling seamless end-to-end usage.
+
+
+
+## Project Backend
+
 A fully-featured backend system for managing leads, with authentication, CRUD APIs, pagination, filtering, and MongoDB Atlas integration. Built using **Node.js**, **Express**, and **MongoDB**.
 
 ---
@@ -145,10 +151,148 @@ CLIENT_URL=http://localhost:5173
 
 ---
 
-## 🚀 Next Steps (Frontend)
+## Project Frontend
 
-- React setup with pages:
-  - Login/Register
-  - Leads Table (with server-side pagination & filters)
-  - Create/Edit Form
-- Use AG Grid or equivalent
+A responsive and user-friendly frontend application for managing leads, with authentication, CRUD operations, pagination, and filtering. Built using **ReactJS** and styled with CSS.
+
+---
+
+## ✅ Features Implemented
+
+- User Authentication (Register, Login, Logout)
+- State Management using React Context
+- Secure communication with backend APIs
+- Lead Management (Create, View, Update, Delete)
+- Server-side Pagination & Filtering in lead list
+- Responsive UI with reusable components
+- Modular and structured project architecture
+
+---
+
+## 🗂 Folder Structure (Frontend)
+
+```
+frontend/
+├── public/
+│   └── vite.svg                 # Default Vite asset
+│
+├── src/
+│   ├── assets/                  # Static assets
+│   ├── components/              # Reusable UI components
+│   │   ├── layout.jsx           # Layout wrapper
+│   │   └── leadForm.jsx         # Lead creation/edit form
+│   │
+│   ├── context/
+│   │   └── authContext.jsx      # Authentication state management
+│   │
+│   ├── pages/                   # Application pages
+│   │   ├── createLead.jsx       # Lead creation page
+│   │   ├── dashboard.jsx        # Leads dashboard with table
+│   │   ├── editLead.jsx         # Lead update page
+│   │   ├── login.jsx            # Login page
+│   │   └── register.jsx         # Register page
+│   │
+│   ├── services/                # API service layer
+│   │   ├── authService.js       # Auth-related API calls
+│   │   ├── http.js              # Axios instance config
+│   │   └── leadService.js       # Lead-related API calls
+│   │
+│   ├── styles/                  # CSS stylesheets
+│   │   ├── form.css
+│   │   ├── index.css
+│   │   ├── layout.css
+│   │   └── table.css
+│   │
+│   ├── utils/                   # Helper functions
+│   │
+│   ├── App.jsx                  # Main App entry
+│   ├── config.js                # Configurations
+│   ├── main.jsx                 # React DOM entry point
+│   └── .env                     # Environment variables
+│
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package.json
+├── package-lock.json
+└── vite.config.js               # Vite config
+```
+
+---
+
+## 🔐 Authentication Flow
+
+- Users register via the **Register page**
+- Login via **Login page**
+- JWT token is stored securely via httpOnly cookies (handled by backend)
+- AuthContext manages global authentication state
+- Only authenticated users can access dashboard & lead pages
+- Logout clears authentication state
+
+---
+
+## 📊 Leads Management
+
+- **Dashboard** displays leads in a grid/table format
+- Supports **server-side pagination & filtering**
+- CRUD operations available:
+  - Create new lead
+  - Edit existing lead
+  - Delete lead
+- UI updates instantly after operations
+
+---
+
+## ⚙️ .env Example
+
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+---
+
+## 🚀 Tech Stack
+
+- **ReactJS** (Frontend framework)
+- **Axios** (API communication)
+- **React Context API** (Authentication & state management)
+- **Vite** (Build tool)
+- **CSS** (Styling)
+
+---
+
+## 🧪 Pages Overview
+
+| Page          | Description                         |
+|---------------|-------------------------------------|
+| Login         | User login with email/password      |
+| Register      | New user registration               |
+| Dashboard     | List of leads (pagination, filters) |
+| Create Lead   | Form to add a new lead              |
+| Edit Lead     | Form to edit existing lead          |
+
+---
+
+## 🌐 Deployment
+
+- **Frontend** deployed on Vercel (or equivalent hosting)
+- Connected with backend (Render/Railway/etc.)
+- Accessible publicly for evaluation
+
+---
+
+## 🧱 Next Steps (Improvements)
+
+- Enhance UI with a component library (e.g., Material UI)
+- Add better form validation and error messages
+- Implement dark mode & accessibility features
+- Add unit and integration tests (Jest/React Testing Library)
+
+---
+
+## 👨‍💻 Tech Used
+
+- **ReactJS** + **Vite**
+- **Axios** for API calls
+- **CSS** for styling
+- **React Context API** for state management
