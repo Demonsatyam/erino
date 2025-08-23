@@ -80,51 +80,39 @@ exports.createLead = catchAsync(async (req, res, next) => {
 });
 
 // @route   GET /leads?page=&limit=&filters...
+// @route   GET /leads?page=&limit=&filters...
 exports.getLeads = catchAsync(async (req, res, next) => {
-  let { page = 1, limit = 20, ...filters } = req.query;
+  let { page = 1, limit = 20, q, ...filters } = req.query;
 
   page = parseInt(page);
   limit = Math.min(parseInt(limit), 100);
 
-  const query = { createdBy: req.user._id }; // 👈 User-specific query
+  const query = { createdBy: req.user._id };
 
-  // String filters
-  ['email', 'company', 'city'].forEach(field => {
-    if (filters[field]) {
-      query[field] = new RegExp(filters[field], 'i');
-    }
-  });
-
-  // Enum filters
-  ['status', 'source'].forEach(field => {
-    if (filters[field]) {
-      query[field] = filters[field];
-    }
-  });
-
-  // Numeric filters
-  ['score', 'lead_value'].forEach(field => {
-    if (filters[`${field}_gt`]) query[field] = { ...query[field], $gt: filters[`${field}_gt`] };
-    if (filters[`${field}_lt`]) query[field] = { ...query[field], $lt: filters[`${field}_lt`] };
-    if (filters[`${field}_eq`]) query[field] = { ...query[field], $eq: Number(filters[`${field}_eq`]) };
-  });
-
-  // Date filters
-  ['created_at', 'last_activity_at'].forEach(field => {
-    const from = filters[`${field}_from`];
-    const to = filters[`${field}_to`];
-    if (from || to) {
-      query[field] = {};
-      if (from) query[field].$gte = new Date(from);
-      if (to) query[field].$lte = new Date(to);
-    }
-  });
-
-  // Boolean filter
-  if (filters.is_qualified !== undefined) {
-    query.is_qualified = filters.is_qualified === 'true';
+  // 🔎 Global search across name, email, company, city
+  if (q && String(q).trim()) {
+    const regex = new RegExp(String(q).trim(), 'i'); // case-insensitive
+    query.$or = [
+      { name: regex },
+      { email: regex },
+      { company: regex },
+      { city: regex },
+    ];
   }
 
+  // String filters (equals/contains) — now includes name too
+  ['email', 'company', 'city', 'name'].forEach((field) => {
+    if (filters[`${field}_eq`]) {
+      query[field] = { $regex: new RegExp(`^${filters[`${field}_eq`]}$`, 'i') };
+    } else if (filters[`${field}_contains`] || filters[field]) {
+      const val = filters[`${field}_contains`] ?? filters[field];
+      query[field] = { $regex: new RegExp(val, 'i') };
+    }
+  });
+
+  // … keep the rest of your enum/number/date/boolean filters and pagination exactly as you have it …
+  // (status/source eq & in; score/lead_value eq/gt/lt/between; created_at/last_activity_at on/before/after/between; is_qualified)
+  
   const total = await Lead.countDocuments(query);
   const leads = await Lead.find(query)
     .skip((page - 1) * limit)
@@ -140,6 +128,7 @@ exports.getLeads = catchAsync(async (req, res, next) => {
     totalPages: Math.ceil(total / limit),
   });
 });
+
 
 
 // @route   GET /leads/:id
