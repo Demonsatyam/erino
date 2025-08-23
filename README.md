@@ -103,6 +103,42 @@ CLIENT_URL=http://localhost:5173
 
 ---
 
+## 🔽 Clone & Run Locally  
+
+1. **Clone the repository**  
+```bash
+git clone https://github.com/Demonsatyam/erino.git
+```
+
+2. **Navigate to the backend folder**  
+```bash
+cd erino/backend
+```
+
+3. **Install dependencies**  
+```bash
+npm install
+```
+
+4. **Set up environment variables**  
+Create a `.env` file in the backend folder and add:  
+```env
+PORT=5000
+MONGO_URI=YOUR_DATABASE_CONNECTION_STRING
+JWT_SECRET=satyam01303
+CLIENT_URL=http://localhost:5173
+```
+
+5. **Run the development server**  
+```bash
+npm run dev
+```
+
+---
+
+
+---
+
 ## 🧪 API Testing (Postman)
 
 ### Auth Routes:
@@ -248,6 +284,42 @@ frontend/
 ```env
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
+
+---
+
+## 🔽 Clone & Run Locally  
+
+1. **Clone the repository**  
+```bash
+git clone https://github.com/Demonsatyam/erino.git
+```
+
+2. **Navigate to the frontend folder**  
+```bash
+cd frontend/frontend
+```
+
+3. **Install dependencies**  
+```bash
+npm install
+```
+
+4. **Set up environment variables**  
+Create a `.env` file in the frontend folder and add:  
+```env
+VITE_API_BASE_URL=http://localhost:5000/
+```
+
+5. **Run the development server**  
+```bash
+npm run dev
+```
+
+6. **Access the app**  
+Open [http://localhost:5173](http://localhost:5173) in your browser.  
+
+---
+
 
 ---
 
