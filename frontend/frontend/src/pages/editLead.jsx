@@ -11,8 +11,12 @@ export default function EditLead() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await getLead(id);
-      setInitial(data);
+      try {
+        const res = await getLead(id);
+        setInitial(res.data.data); // ✅ fix here
+      } catch (error) {
+        console.error("Failed to fetch lead", error);
+      }
     })();
   }, [id]);
 
@@ -21,12 +25,15 @@ export default function EditLead() {
     try {
       await updateLead(id, payload);
       nav("/dashboard");
+    } catch (error) {
+      console.error("Failed to update lead", error);
     } finally {
       setSaving(false);
     }
   };
 
-  if (!initial) return null;
+  if (!initial) return <p>Loading...</p>;
+
   return (
     <div>
       <h1>Edit Lead</h1>
