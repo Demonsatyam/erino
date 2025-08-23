@@ -21,12 +21,12 @@ export default function Layout() {
           <NavLink to="/settings"><FiSettings /> Settings</NavLink>
         </nav>
         <div className="profile">
-          <div className="avatar">{user?.name?.[0] || "U"}</div>
-          <div className="meta">
-            <div className="name">{user?.name || "User"}</div>
-            <div className="email">{user?.email}</div>
+          <div className="avatar">{user?.name?.charAt(0)}</div>
+          <div className="info">
+            <span>{user?.name}</span>
+            <span>{user?.email}</span>
           </div>
-          <button className="link" onClick={onLogout}>Logout</button>
+          <button className="logout-btn" onClick={onLogout}>Logout</button>
         </div>
       </aside>
 
