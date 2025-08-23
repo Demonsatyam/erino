@@ -65,7 +65,7 @@ backend/
 
 ## 📝 Lead Model Fields
 
-\`\`\`js
+```js
 {
   first_name: String,
   last_name: String,
@@ -82,7 +82,7 @@ backend/
   is_qualified: Boolean (default: false),
   created_at, updated_at: Date
 }
-\`\`\`
+```
 
 ---
 
