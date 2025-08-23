@@ -75,27 +75,23 @@ exports.getCurrentUser = catchAsync(async (req, res, next) => {
 
 // @route   POST /leads
 exports.createLead = catchAsync(async (req, res, next) => {
-  const lead = await Lead.create(req.body);
+  const lead = await Lead.create({ ...req.body, createdBy: req.user._id });
   res.status(201).json({ success: true, data: lead });
 });
 
 // @route   GET /leads?page=&limit=&filters...
 exports.getLeads = catchAsync(async (req, res, next) => {
-  let {
-    page = 1,
-    limit = 20,
-    ...filters
-  } = req.query;
+  let { page = 1, limit = 20, ...filters } = req.query;
 
   page = parseInt(page);
   limit = Math.min(parseInt(limit), 100);
 
-  const query = {};
+  const query = { createdBy: req.user._id }; // 👈 User-specific query
 
   // String filters
   ['email', 'company', 'city'].forEach(field => {
     if (filters[field]) {
-      query[field] = new RegExp(filters[field], 'i'); // contains
+      query[field] = new RegExp(filters[field], 'i');
     }
   });
 
@@ -144,6 +140,7 @@ exports.getLeads = catchAsync(async (req, res, next) => {
     totalPages: Math.ceil(total / limit),
   });
 });
+
 
 // @route   GET /leads/:id
 exports.getLeadById = catchAsync(async (req, res, next) => {
