@@ -80,44 +80,37 @@ exports.createLead = catchAsync(async (req, res, next) => {
 });
 
 // @route   GET /leads?page=&limit=&filters...
-// @route   GET /leads?page=&limit=&filters...
 exports.getLeads = catchAsync(async (req, res, next) => {
-  let { page = 1, limit = 20, q, ...filters } = req.query;
+  let { page = 1, limit = 20, q = "", status, source } = req.query;
 
-  page = parseInt(page);
-  limit = Math.min(parseInt(limit), 100);
+  page = Number.parseInt(page, 10) || 1;
+  limit = Math.min(Number.parseInt(limit, 10) || 20, 100);
 
   const query = { createdBy: req.user._id };
 
-  // 🔎 Global search across name, email, company, city
-  if (q && String(q).trim()) {
-    const regex = new RegExp(String(q).trim(), 'i'); // case-insensitive
-    query.$or = [
-      { name: regex },
-      { email: regex },
-      { company: regex },
-      { city: regex },
-    ];
+  // 1) Global text search: name | email | city | company (case-insensitive, contains)
+  const qTrim = String(q).trim();
+  if (qTrim) {
+    const r = new RegExp(qTrim, "i");
+    query.$or = [{ name: r }, { email: r }, { city: r }, { company: r }];
   }
 
-  // String filters (equals/contains) — now includes name too
-  ['email', 'company', 'city', 'name'].forEach((field) => {
-    if (filters[`${field}_eq`]) {
-      query[field] = { $regex: new RegExp(`^${filters[`${field}_eq`]}$`, 'i') };
-    } else if (filters[`${field}_contains`] || filters[field]) {
-      const val = filters[`${field}_contains`] ?? filters[field];
-      query[field] = { $regex: new RegExp(val, 'i') };
-    }
-  });
+  // 2) Status filter (exact). Ignore if empty or "all"
+  if (status && status !== "all") {
+    query.status = status;
+  }
 
-  // … keep the rest of your enum/number/date/boolean filters and pagination exactly as you have it …
-  // (status/source eq & in; score/lead_value eq/gt/lt/between; created_at/last_activity_at on/before/after/between; is_qualified)
-  
+  // 3) Source filter (exact). Ignore if empty or "all"
+  if (source && source !== "all") {
+    query.source = source;
+  }
+
+  // ---- fetch + paginate ----
   const total = await Lead.countDocuments(query);
   const leads = await Lead.find(query)
+    .sort({ created_at: -1 })
     .skip((page - 1) * limit)
-    .limit(limit)
-    .sort({ created_at: -1 });
+    .limit(limit);
 
   res.status(200).json({
     success: true,
