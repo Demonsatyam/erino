@@ -5,24 +5,12 @@ const errorMiddleware = require('./middlewares/error');
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// Log origin for debugging
-console.log('CLIENT_URL:', process.env.CLIENT_URL);
-
-// CORS setup with dynamic origin check
-const allowedOrigins = [process.env.CLIENT_URL];
-
+// ✅ Vercel frontend origin (STATIC for now)
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: 'https://erino-omega.vercel.app',
   credentials: true,
 }));
 
@@ -36,7 +24,7 @@ app.use((req, res, next) => {
 app.use('/api', require('./routes/authRoutes'));
 app.use('/api/leads', require('./routes/leadRoutes'));
 
-// Error middleware (must be after all routes)
+// Error middleware
 app.use(errorMiddleware);
 
 module.exports = app;
